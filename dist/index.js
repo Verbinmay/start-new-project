@@ -68,6 +68,16 @@ app.post("/products", (req, res) => {
     products.push(newProduct);
     res.status(201).send(newProduct);
 });
+app.put("/products/:id", (req, res) => {
+    let product = products.find((p) => p.id === +req.params.id);
+    if (product) {
+        product.title = req.body.title;
+        res.status(200).send(product);
+    }
+    else {
+        res.send(404);
+    }
+});
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
