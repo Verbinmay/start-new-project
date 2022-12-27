@@ -57,6 +57,12 @@ app.delete("/products/:id", (req: Request, res: Response) => {
   res.send(404);
 });
 
+app.post("/products", (req: Request, res: Response) => {
+  const newProduct = { id: +new Date(), title: req.body.title };
+  products.push(newProduct);
+  res.status(201).send(newProduct);
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
