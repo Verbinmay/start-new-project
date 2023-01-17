@@ -2,8 +2,12 @@ import express, { request, Request, Response } from "express";
 
 import { Router } from "express";
 import { productsRepository } from "../repositories/products-repository";
+import {body, validationResult} from "express-validator";
+import { inputValidationMiddleware } from "../midlewares/input-validation-middleware";
 
 export const productsRouter = Router({});
+
+const titleValidation = body('title').trim().isLength({min: 3, max:10}).withMessage('Title error ');
 
 productsRouter.get("/", (req: Request, res: Response) => {
   const foundProducts = productsRepository.findProducts(
@@ -31,12 +35,17 @@ productsRouter.delete("/:id", (req: Request, res: Response) => {
   }
 });
 
-productsRouter.post("/", (req: Request, res: Response) => {
+productsRouter.post("/",
+titleValidation,inputValidationMiddleware,
+(req: Request, res: Response) => {
+
+  
   const newProduct = productsRepository.createProduct(req.body.title);
   res.status(201).send(newProduct);
 });
 
-productsRouter.put("/:id", (req: Request, res: Response) => {
+productsRouter.put("/:id",titleValidation, inputValidationMiddleware, (req: Request, res: Response) => {
+
   const isUpdated = productsRepository.updateProduct(
     +req.params.id,
     req.body.title
