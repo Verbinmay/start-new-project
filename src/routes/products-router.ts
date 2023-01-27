@@ -1,6 +1,4 @@
-import express, { request, Request, Response } from "express";
-
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import {
   productsRepository,
   ProductType,
